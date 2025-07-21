@@ -2,6 +2,7 @@ import requests
 import sys
 from bs4 import BeautifulSoup
 
+
 indexes = [2298]
 
 for ind in range(2190, 2216):
@@ -12,13 +13,11 @@ for ind in indexes:
     dir = "01.03.02"
     url = 'https://abit.itmo.ru/rating/bachelor/budget/' + str(ind)
 
-
     arr_celevoe_kvota = []
     arr_osobaya_kvota = []
     arr_otdelnaya_kvota = []
     arr_bvi_kvota = []
     arr_all_kvota = []
-
 
     all_users_inf = []
 
@@ -74,8 +73,6 @@ for ind in indexes:
     num_osob_kv = -1
     num_otdel_kv = -1
 
-    work_numbers = True
-
     if parsed_data_for_numbers:
         for item in parsed_data_for_numbers:
             find = item.get_text()
@@ -108,20 +105,16 @@ for ind in indexes:
         except ValueError:
             print("Никто не участвует в конкурсе отдельной квоты")
         
-
         try:
             ind_all_kv = find.index("Общий конкурс") + len("Общий конкурс")
             num_all_kv = int(find[ind_all_kv:ind_all_kv + 10].split()[0])
             print(f'Номер первой общей квоты : {num_all_kv}')
         except ValueError:
             print("Никто не участвует в общем конкрусе")
-
-
-    elif min([num_bvi_kv, num_all_kv, num_cel_kv, num_osob_kv, num_otdel_kv]) < 0:
-        work_numbers = False
-        print("Не удалось получить данные номеров.", [num_bvi_kv, num_all_kv, num_cel_kv, num_osob_kv, num_otdel_kv])
+        
     else:
-        print(parsed_data_for_numbers)
+
+        print(parsed_data_for_numbers, [num_bvi_kv, num_all_kv, num_cel_kv, num_osob_kv, num_otdel_kv])
 
     data_selector_all = '.RatingPage_table__item__qMY0F'
     parsed_data_all = parse_all(url, data_selector_all)
@@ -141,7 +134,6 @@ for ind in indexes:
             bool_osob_kv = False
             bool_otdel_kv = False
             bool_all_kv = False        
-            
 
             if num_bvi_kv != -1 and user_num >= num_bvi_kv:
                 if num_cel_kv != -1:
@@ -191,8 +183,6 @@ for ind in indexes:
             
             if num_all_kv != -1 and user_num >= num_all_kv:
                 bool_all_kv = True
-            
-
                 
             if bool_bvi_kv:
 
@@ -271,7 +261,6 @@ for ind in indexes:
                 print("ERROR")
     else:
         print(parsed_data_all, [num_bvi_kv, num_all_kv, num_cel_kv, num_osob_kv, num_otdel_kv], '\n')
-
 
     #Ввод данных в txt файл
     name =  uni + " " + dir + ".txt"
